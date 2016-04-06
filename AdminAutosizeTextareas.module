@@ -1,0 +1,65 @@
+<?php
+/**
+ * AdminAutosizeTextareas (0.0.1)
+ * Autosize admin text areas.
+ *
+ * @author tpr, Netcarver
+ *
+ * ProcessWire 2.x
+ * Copyright (C) 2011 by Ryan Cramer
+ * Licensed under GNU/GPL v2, see LICENSE.TXT
+ *
+ * http://www.processwire.com
+ * http://www.ryancramer.com
+ *
+ */
+
+class AdminAutosizeTextareas extends WireData implements Module {
+
+    public static function getModuleInfo() {
+		return array(
+			'title'     => 'AdminAutosizeTextareas',
+			'class'     => 'AdminAutosizeTextareas',
+			'version'   => '1.0.0',
+			'summary'   => __('Autosize admin text areas'),
+			'href'      => 'https://processwire.com/talk/topic/12950autosizetextareasinadmin/',
+			'author'    => 'tpr, netcarver',
+            'autoload'  => 'template=admin',
+            'singular'  => true,
+            'permanent' => false,
+			);
+	}
+
+
+	public function init() {
+        $root = $this->config->urls->siteModules.__CLASS__;
+		$this->config->scripts->add($root."/AdminAutosizeTextareas.js");
+		$this->addHookAfter("Page::render", $this, "hookPageRender");
+    }
+
+
+    public function hookPageRender($event) {
+        $js = <<< HTML
+
+<script>
+
+    $(document).ready(function () {
+        var autosizeTextareas = document.querySelectorAll('textarea');
+        if (autosizeTextareas.length) {
+            autosize(autosizeTextareas);
+        }
+    });
+
+    $('.langTabs').on('tabsactivate', function(event, ui) {
+        var textareas = ui.newPanel.get(0).querySelectorAll('textarea');
+
+        if(textareas.length && window.autosize && window.autosize.update) {
+            autosize.update(textareas);
+        }
+    });
+</script>
+HTML;
+
+        $event->return = str_replace('</body>', $js . PHP_EOL . '</body>', $event->return);
+    }
+}
