@@ -22,7 +22,7 @@ class AdminAutosizeTextareas extends WireData implements Module {
 			'class'     => 'AdminAutosizeTextareas',
 			'version'   => '1.0.0',
 			'summary'   => __('Autosize admin text areas'),
-			'href'      => 'https://processwire.com/talk/topic/12950autosizetextareasinadmin/',
+			'href'      => 'https://processwire.com/talk/topic/12950-autosize-textareas-in-admin/#entry117507',
 			'author'    => 'tpr, netcarver',
             'autoload'  => 'template=admin',
             'singular'  => true,
